@@ -2,6 +2,38 @@ import os, re
 import numpy as np
 from Utils.Representations import *
 
+
+class Vocab:
+    def __init__(self):
+        self.word_count = 0
+        self.ind2word = {}
+        self.word2ind = {}
+
+        self.tag_count = 0
+        self.tag2id = {}
+        self.id2tag = {}
+
+    def index_document(self, document):
+        indexes = []
+        for token in document:
+            indexes.append(self.index_token(token))
+        return indexes
+
+    def index_token(self, token):
+        if token not in self.word2ind:
+            self.word2ind[token] = self.word_count
+            self.ind2word[self.word_count] = token
+            self.word_count += 1
+        return self.word2ind[token]
+
+    def get_tag_id(self, tag):
+        if tag not in self.tag2id:
+            self.tag2id[tag] = self.tag_count
+            self.id2tag[self.tag_count] = tag
+            self.tag_count += 1
+        return self.tag2id[tag]
+
+
 class ProjectionDataset():
     """
     A wrapper for the translation dictionary. The translation dictionary
@@ -130,40 +162,40 @@ class General_Dataset(object):
             devdata = dev_pos + dev_pos2 + dev_neg + dev_neg2
             testdata = test_pos + test_pos2 + test_neg + test_neg2
 
-            # Set up vocab now
-            self.vocab = set()
-
-            
-            # Training data
-            Xtrain = [data for data, y in traindata]
-            if self.lowercase:
-                Xtrain = [[w.lower() for w in sent] for sent in Xtrain]
-            if self.one_hot is True:
-                ytrain = [self.to_array(y, 2) for data, y in traindata]
-            else:
-                ytrain = [y for data, y in traindata]
-            self.vocab.update(set([w for i in Xtrain for w in i]))
-
-            # Dev data
-            Xdev = [data for data, y in devdata]
-            if self.lowercase:
-                Xdev = [[w.lower() for w in sent] for sent in Xdev]
-            if self.one_hot is True:
-                ydev = [self.to_array(y, 2) for data, y in devdata]
-            else:
-                ydev = [y for data, y in devdata]
-            self.vocab.update(set([w for i in Xdev for w in i]))
-
-            # Test data
-            Xtest = [data for data, y in testdata]
-            if self.lowercase:
-                Xtest = [[w.lower() for w in sent] for sent in Xtest]
-            if self.one_hot is True:
-                ytest = [self.to_array(y, 2) for data, y in testdata]
-            else:
-                ytest = [y for data, y in testdata]
-            self.vocab.update(set([w for i in Xtest for w in i]))
-        
+            # # Set up vocab now
+            # self.vocab = set()
+            #
+            #
+            # # Training data
+            # Xtrain = [data for data, y in traindata]
+            # if self.lowercase:
+            #     Xtrain = [[w.lower() for w in sent] for sent in Xtrain]
+            # if self.one_hot is True:
+            #     ytrain = [self.to_array(y, 2) for data, y in traindata]
+            # else:
+            #     ytrain = [y for data, y in traindata]
+            # self.vocab.update(set([w for i in Xtrain for w in i]))
+            #
+            # # Dev data
+            # Xdev = [data for data, y in devdata]
+            # if self.lowercase:
+            #     Xdev = [[w.lower() for w in sent] for sent in Xdev]
+            # if self.one_hot is True:
+            #     ydev = [self.to_array(y, 2) for data, y in devdata]
+            # else:
+            #     ydev = [y for data, y in devdata]
+            # self.vocab.update(set([w for i in Xdev for w in i]))
+            #
+            # # Test data
+            # Xtest = [data for data, y in testdata]
+            # if self.lowercase:
+            #     Xtest = [[w.lower() for w in sent] for sent in Xtest]
+            # if self.one_hot is True:
+            #     ytest = [self.to_array(y, 2) for data, y in testdata]
+            # else:
+            #     ytest = [y for data, y in testdata]
+            # self.vocab.update(set([w for i in Xtest for w in i]))
+            #
         else:
             ##################
             # 4 CLASS        #
@@ -208,38 +240,76 @@ class General_Dataset(object):
             traindata = train_pos + train_neg + train_strneg + train_strpos
             devdata = dev_pos + dev_neg + dev_strneg + dev_strpos
             testdata = test_pos + test_neg + test_strneg + test_strpos
-
-            self.vocab = set()
-
+            #
+            # self.vocab = set()
+            #
             # Training data
-            Xtrain = [data for data, y in traindata]
-            if self.lowercase:
-                Xtrain = [[w.lower() for w in sent] for sent in Xtrain]
-            if self.one_hot is True:
-                ytrain = [self.to_array(y, 4) for data, y in traindata]
-            else:
-                ytrain = [y for data, y in traindata]
-            self.vocab.update(set([w for i in Xtrain for w in i]))
+            # Xtrain = [data for data, y in traindata]
+            # if self.lowercase:
+            #     Xtrain = [[w.lower() for w in sent] for sent in Xtrain]
+            # if self.one_hot is True:
+            #     ytrain = [self.to_array(y, 4) for data, y in traindata]
+            # else:
+            #     ytrain = [y for data, y in traindata]
+            # self.vocab.update(set([w for i in Xtrain for w in i]))
+            #
+            # # Dev data
+            # Xdev = [data for data, y in devdata]
+            # if self.lowercase:
+            #     Xdev = [[w.lower() for w in sent] for sent in Xdev]
+            # if self.one_hot is True:
+            #     ydev = [self.to_array(y, 4) for data, y in devdata]
+            # else:
+            #     ydev = [y for data, y in devdata]
+            # self.vocab.update(set([w for i in Xdev for w in i]))
+            #
+            # # Test data
+            # Xtest = [data for data, y in testdata]
+            # if self.lowercase:
+            #     Xtest = [[w.lower() for w in sent] for sent in Xtest]
+            # if self.one_hot is True:
+            #     ytest = [self.to_array(y, 4) for data, y in testdata]
+            # else:
+            #     ytest = [y for data, y in testdata]
+            # self.vocab.update(set([w for i in Xtest for w in i]))
 
-            # Dev data
-            Xdev = [data for data, y in devdata]
-            if self.lowercase:
-                Xdev = [[w.lower() for w in sent] for sent in Xdev]
-            if self.one_hot is True:
-                ydev = [self.to_array(y, 4) for data, y in devdata]
-            else:
-                ydev = [y for data, y in devdata]
-            self.vocab.update(set([w for i in Xdev for w in i]))
+        # Set up vocab now
+        self.vocab = set()
 
-            # Test data
-            Xtest = [data for data, y in testdata]
-            if self.lowercase:
-                Xtest = [[w.lower() for w in sent] for sent in Xtest]
-            if self.one_hot is True:
-                ytest = [self.to_array(y, 4) for data, y in testdata]
-            else:
-                ytest = [y for data, y in testdata]
-            self.vocab.update(set([w for i in Xtest for w in i]))
+        if binary:
+            n_class = 2
+        else:
+            n_class = 4
+
+        # Training data
+        Xtrain = [data for data, y in traindata]
+        if self.lowercase:
+            Xtrain = [[w.lower() for w in sent] for sent in Xtrain]
+        if self.one_hot is True:
+            ytrain = [self.to_array(y, n_class) for data, y in traindata]
+        else:
+            ytrain = [y for data, y in traindata]
+        self.vocab.update(set([w for i in Xtrain for w in i]))
+
+        # Dev data
+        Xdev = [data for data, y in devdata]
+        if self.lowercase:
+            Xdev = [[w.lower() for w in sent] for sent in Xdev]
+        if self.one_hot is True:
+            ydev = [self.to_array(y, n_class) for data, y in devdata]
+        else:
+            ydev = [y for data, y in devdata]
+        self.vocab.update(set([w for i in Xdev for w in i]))
+
+        # Test data
+        Xtest = [data for data, y in testdata]
+        if self.lowercase:
+            Xtest = [[w.lower() for w in sent] for sent in Xtest]
+        if self.one_hot is True:
+            ytest = [self.to_array(y, n_class) for data, y in testdata]
+        else:
+            ytest = [y for data, y in testdata]
+        self.vocab.update(set([w for i in Xtest for w in i]))
 
         if self.rep is not words:
             Xtrain = np.array(Xtrain)
