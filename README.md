@@ -1,7 +1,7 @@
 Bilingual Sentiment Embeddings: Joint Projection of Sentiment Across Languages
 ==============
 
-This is the source code from the ACL paper:
+This is forked from the source code from the ACL paper:
 
 Jeremy Barnes, Roman Klinger, and Sabine Schulde im Walde. 2018. [**Bilingual Sentiment Embeddings: Joint Projection of Sentiment Across Languages**](http://aclweb.org/anthology/P18-1231). In *Proceedings of ACL 2018*.
 
@@ -40,8 +40,8 @@ Usage
 First, clone the repo:
 
 ```
-git clone https://github.com/jbarnesspain/blse
-cd blse
+git clone https://github.com/UriSha/blse.git
+
 ```
 
 
@@ -50,24 +50,14 @@ or by downloading the [pretrained embeddings](https://drive.google.com/open?id=1
 unzipping them and putting them in the 'embeddings' directory:
 
 
-Run the blse parameter search script, in order to get the best hyperparameters:
-
-```
-python3 parmeter_search.py
 ```
 
-Finally, you can use the blse.py script which will automatically use the best hyperparameters found.
+Finally, run main.y with the desired parameters. For example
 
 ```
-python3 blse.py
+python3 main.py --model rnn_attn_blse --binary False --target_lang ca --alpha 0.01
+
 ``` 
-
-Update
--------
-
-I have added further experiments comparing our method with [MUSE](https://github.com/facebookresearch/MUSE). MUSE outperforms
-VecMap ([version](https://aclweb.org/anthology/P17-1042) from 2017) on all setups and Barista on the binary setup. BLSE performs better than MUSE on 5 of the 6 setups.
-
 
 License
 -------
