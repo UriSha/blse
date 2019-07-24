@@ -41,21 +41,19 @@ First, clone the repo:
 
 ```
 git clone https://github.com/UriSha/blse.git
-
 ```
 
 
 Then, get monolingual embeddings, either by training your own,
 or by downloading the [pretrained embeddings](https://drive.google.com/open?id=1GpyF2h0j8K5TKT7y7Aj0OyPgpFc8pMNS) mentioned in the paper,
-unzipping them and putting them in the 'embeddings' directory:
-
-
-```
+unzipping them and putting them in the 'embeddings' directory
 
 Finally, run main.y with the desired parameters. For example
 
 ```
 python3 main.py --model rnn_attn_blse --binary False --target_lang ca --alpha 0.01
+```
+
 
 ``` 
 
